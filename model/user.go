@@ -16,12 +16,12 @@ type User struct {
 }
 
 type UserModel struct {
-	db *gorm.DB
+	DB *gorm.DB
 }
 
 func (model *UserModel) Insert(user User) (User, error) {
 
-	err := model.db.Create(&user).Error
+	err := model.DB.Create(&user).Error
 	if err != nil {
 		log.Println("CREATE USER ERROR", err)
 		return User{}, err
