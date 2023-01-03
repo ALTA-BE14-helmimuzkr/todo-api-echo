@@ -145,7 +145,12 @@ func (controller *UserController) GetUser() echo.HandlerFunc {
 
 		return ctx.JSON(http.StatusOK, map[string]interface{}{
 			"message": "Berhasil mendapatkan data user",
-			"data":    user,
+			"data": model.UserResponse{
+				ID:        user.ID,
+				Name:      user.Name,
+				Email:     user.Email,
+				Telephone: user.Telephone,
+			},
 		})
 	}
 }
@@ -159,9 +164,20 @@ func (controller *UserController) GetAll() echo.HandlerFunc {
 			})
 		}
 
+		userResponses := []model.UserResponse{}
+		for _, v := range users {
+			user := model.UserResponse{}
+			user.ID = v.ID
+			user.Name = v.Name
+			user.Email = v.Email
+			user.Telephone = v.Telephone
+
+			userResponses = append(userResponses, user)
+		}
+
 		return ctx.JSON(http.StatusOK, map[string]interface{}{
 			"message": "Berhasil mendapatkan data user",
-			"data":    users,
+			"data":    userResponses,
 		})
 	}
 }
@@ -190,11 +206,14 @@ func (controller *UserController) Login() echo.HandlerFunc {
 			})
 		}
 
-		user.Password = ""
-
 		return ctx.JSON(http.StatusOK, map[string]interface{}{
 			"message": "Berhasil melakukan login",
-			"data":    user,
+			"data": model.UserResponse{
+				ID:        user.ID,
+				Name:      user.Name,
+				Email:     user.Email,
+				Telephone: user.Telephone,
+			},
 		})
 	}
 }

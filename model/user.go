@@ -14,6 +14,12 @@ type User struct {
 	Telephone string `json:"telephone" form:"telephone" gorm:"type:varchar(15)"`
 	IsActive  bool   `gorm:"type:bool; default:true"`
 }
+type UserResponse struct {
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Telephone string `json:"telephone"`
+}
 
 type UserModel struct {
 	DB *gorm.DB
