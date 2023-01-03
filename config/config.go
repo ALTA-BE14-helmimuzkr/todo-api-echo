@@ -17,9 +17,19 @@ type AppConfig struct {
 func InitConfig() *AppConfig {
 	appConfig := AppConfig{}
 
-	viper.AddConfigPath("./.env")
+	viper.AddConfigPath(".")
+	viper.SetConfigName("app")
+	viper.SetConfigType("env")
+
+	// Load config
 	if err := viper.ReadInConfig(); err != nil {
-		log.Println("Gagal membaca config", err)
+		log.Println("Read config failed", err)
+		return nil
+	}
+
+	// Parsing config dari hasil read(json) ke struct app config
+	if err := viper.Unmarshal(&appConfig); err != nil {
+		log.Println("Unmarshal config failed", err)
 		return nil
 	}
 

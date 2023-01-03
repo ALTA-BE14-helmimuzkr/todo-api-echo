@@ -14,7 +14,7 @@ func OpenConnectionMysql(c *config.AppConfig) *gorm.DB {
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Println("Koneksi database mysql gagal", err)
+		log.Println("Koneksi database mysql gagal", err.Error())
 		return nil
 	}
 
