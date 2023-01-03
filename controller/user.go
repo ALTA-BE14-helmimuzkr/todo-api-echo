@@ -63,9 +63,30 @@ func (controller *UserController) Update() echo.HandlerFunc {
 				"message": "Kesalahan input client",
 			})
 		}
+		// Parsing from request parameter
+		id, err := strconv.Atoi(ctx.Param("id"))
+		if err != nil {
+			log.Println(err.Error())
+			return ctx.JSON(http.StatusBadRequest, map[string]interface{}{
+				"message": "Kesalahan input client",
+			})
+		}
+		// Assign id dari parameter ke user.ID
+		user.ID = uint(id)
+
+		// Hashing password menggunakan bcrypt
+		hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+		if err != nil {
+			log.Println(err.Error())
+			return ctx.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "Kesalahan pada server",
+			})
+		}
+		// Assign hasil hash yang sudah diconvert ke string ke dalam Password
+		user.Password = string(hash)
 
 		// Update
-		user, err := controller.Model.Save(user)
+		user, err = controller.Model.Update(user)
 		if err != nil {
 			return ctx.JSON(http.StatusInternalServerError, map[string]interface{}{
 				"message": "Kesalahan pada server",

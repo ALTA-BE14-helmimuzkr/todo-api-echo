@@ -7,10 +7,10 @@ import (
 )
 
 type User struct {
-	ID        uint   `json:"id" gorm:"type:int; primary key; auto_increment"`
-	Name      string `json:"name" form:"name"  gorm:"type:varchar(50); unique"`
-	Email     string `json:"email" form:"email"  gorm:"type:varchar(50); not null"`
-	Password  string `json:"password" form:"password" gorm:"type:varchar(255); not null"`
+	ID        uint   `json:"id" gorm:"type:int;primary key;auto_increment"`
+	Name      string `json:"name" form:"name"  gorm:"type:varchar(50)"`
+	Email     string `json:"email" form:"email" gorm:"type:varchar(50);not null;unique"`
+	Password  string `json:"password" form:"password" gorm:"type:varchar(255);not null"`
 	Telephone string `json:"telephone" form:"telephone" gorm:"type:varchar(15)"`
 	IsActive  bool   `gorm:"type:bool; default:true"`
 }
@@ -29,8 +29,8 @@ func (model *UserModel) Insert(user User) (User, error) {
 	return user, nil
 }
 
-func (model *UserModel) Save(user User) (User, error) {
-	tx := model.DB.Save(&user)
+func (model *UserModel) Update(user User) (User, error) {
+	tx := model.DB.Where("id = ?", user.ID).Updates(&user)
 	if tx.Error != nil {
 		log.Println("UPDATE USER QUERY ERROR", tx.Error)
 		return User{}, tx.Error

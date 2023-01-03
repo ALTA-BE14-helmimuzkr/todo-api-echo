@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/ALTA-BE14-helmimuzkr/config"
@@ -17,7 +16,6 @@ func main() {
 
 	// Setup Config
 	c := config.InitConfig()
-	fmt.Println(c)
 
 	// Setup Dataabse
 	db := database.OpenConnectionMysql(c)
