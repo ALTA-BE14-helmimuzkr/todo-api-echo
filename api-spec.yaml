@@ -1,0 +1,286 @@
+openapi: "3.0.2"
+info:
+    title: RESTFul API Todo
+    description: |-
+        Ini adalah tugas membuat dokumen spesifikasi RESTFul API Todo
+    version: "1.0"
+    contact:
+        name: Muhammad Helmi Muzakir
+        email: mhelmimuzakir@gmail.com
+        url: "https://github.com/helmimuzkr"
+    license:
+        name: Alterra Academy
+servers:
+    - url: https://todo.com/api
+      description: Production Server
+    - url: https://dev.todo.com/api/{version}
+      description: Development server
+      variables:
+          version:
+              default: v1
+              enum:
+                  - "v1"
+                  - "v2"
+                  - "v3"
+tags:
+    - name: User
+paths:
+    /user:
+        post:
+            tags:
+                - "User"
+            summary: Registrasi user
+            description: Create a new user
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                                    format: password
+                                telephone:
+                                    type: string
+                            required:
+                                - name
+                                - email
+                                - password
+                                - telephone
+                        example:
+                            name: "helmi"
+                            email: "mzkr@gmail.com"
+                            password: "helmi123"
+                            telephone: "08128088888"
+            responses:
+                201:
+                    description: The request succeeded, and a new resource was created as a result.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ResponseObject"
+                            example:
+                                message: "Berhasil melakukan registrasi"
+                                data:
+                400:
+                    $ref: "#/components/responses/400"
+                500:
+                    $ref: "#/components/responses/500"
+        get:
+            tags:
+                - "User"
+            summary: List User
+            description: Return all user data
+            responses:
+                200:
+                    description: Success get list of user.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ResponseObjectOfArray"
+                            example:
+                                message: Berhasil menampilkan list data user.
+                                data:
+                                    - id: 1
+                                      name: "helmi"
+                                      email: "mzkr@gmail.com"
+                                      telephone: "08128088888"
+                                    - id: 2
+                                      name: "muzakir"
+                                      email: "helmi@gmail.com"
+                                      telephone: "08122928373"
+                500:
+                    $ref: "#/components/responses/500"
+    /user/login:
+        post:
+            tags:
+                - "User"
+            summary: Login user
+            description: Return an user data
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                                    format: password
+                            required:
+                                - email
+                                - password
+                        example:
+                            email: "muzkr@gmail.com"
+                            password: "helmi123"
+            responses:
+                200:
+                    description: "Login success and success get user data"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ResponseObject"
+                            example:
+                                message: Login Success
+                                data:
+                                    id: 1
+                                    name: "helmi"
+                                    email: "mzkr@gmail.com"
+                                    telephone: "08128088888"
+                400:
+                    $ref: "#/components/responses/400"
+                404:
+                    $ref: "#/components/responses/404"
+                500:
+                    $ref: "#/components/responses/500"
+    /user/{id}:
+        get:
+            tags:
+                - "User"
+            summary: Get user
+            description: Get user by id
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Success get user data by id.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ResponseObject"
+                            example:
+                                message: "Berhasil mendapatkan data user"
+                                data:
+                                    id: 1
+                                    name: "helmi"
+                                    email: "mzkr@gmail.com"
+                                    telephone: "08128088888"
+                400:
+                    $ref: "#/components/responses/400"
+                404:
+                    $ref: "#/components/responses/404"
+                500:
+                    $ref: "#/components/responses/500"
+        put:
+            tags:
+                - "User"
+            summary: Update user
+            description: Update user by id partially
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                password:
+                                    type: string
+                                    format: password
+                        example:
+                            - name: "helmi"
+                            - password: "helmi123"
+            responses:
+                200:
+                    description: Success update user by id partially.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ResponseObject"
+                            example:
+                                message: "Berhasil update data user"
+                                data:
+                400:
+                    $ref: "#/components/responses/400"
+                500:
+                    $ref: "#/components/responses/500"
+        delete:
+            tags:
+                - "User"
+            summary: Delete user
+            description: Delete user by id
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                204:
+                    description: User telah berhasil dihapus.
+                404:
+                    $ref: "#/components/responses/404"
+                500:
+                    $ref: "#/components/responses/500"
+components:
+    schemas:
+        ResponseObject:
+            type: object
+            properties:
+                message:
+                    type: string
+                data:
+                    type: object
+        ResponseObjectOfArray:
+            type: object
+            properties:
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        type: object
+    responses:
+        400:
+            description: Invalid request from client.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                    example:
+                        message: "Kesalahan input client"
+        404:
+            description: Data not found.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            message:
+                                type: string
+                    example:
+                        message: "Data tidak ditemukan"
+
+        500:
+            description: The server has encountered a situation it does not know how to handle.
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            data:
+                                type: object
+                            message:
+                                type: string
+                    example:
+                        message: "Kesalahan pada server"
