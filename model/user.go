@@ -36,7 +36,7 @@ func (model *UserModel) Insert(user User) (User, error) {
 }
 
 func (model *UserModel) Update(user User) (User, error) {
-	tx := model.DB.Where("id = ?", user.ID).Updates(&user)
+	tx := model.DB.Model(&user).Where("id = ?", user.ID).Updates(&user)
 	if tx.Error != nil {
 		log.Println("UPDATE USER QUERY ERROR", tx.Error)
 		return User{}, tx.Error
